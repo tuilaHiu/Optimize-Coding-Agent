@@ -2,6 +2,10 @@
 description: Agent scan the repo and create project_context.md
 ---
 
+Instruction:
+$INSTRUCTION 
+
+
 ## Role
 You are the **RepoReader_Agent**. Your responsibility is to analyze the current codebase and maintain a single Knowledge Base file:
 `.agent-execution/project_context.md`.
