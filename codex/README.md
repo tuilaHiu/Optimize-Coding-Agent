@@ -1,27 +1,15 @@
-# WORKFLOW FOR CODEX CLI
+# Codex CLI Folder Guide
 
-# Copy Guide for AGENTS.md and prompts
+## Overview
+A small toolkit of coding rules and workflow helpers used by Codex CLI and Codex extensions.
 
-## 1) Copy the shared files from `~/.codex` into this repo
+## Copy this folder into `~/.codex`
 ```bash
-# ensure the destination folder exists
-mkdir -p ./codex
-
-# copy the agent instructions and the prompts folder from ~/.codex
-cp ~/.codex/AGENTS.md ./codex/AGENTS.md
-cp -r ~/.codex/prompts ./codex/prompts
-```
-
-## 2) Copy the repo versions back into `~/.codex`
-```bash
-# make sure ~/.codex exists
+# ensure target exists
 mkdir -p ~/.codex
 
-# copy this repo's versions to your home config
-cp ./codex/AGENTS.md ~/.codex/AGENTS.md
-cp -r ./codex/prompts ~/.codex/prompts
+# copy the entire codex folder into your home config
+cp -r ./codex ~/.codex/
 ```
 
-Notes:
-- `cp -r` will overwrite existing files; add `-i` if you want interactive prompts.
-- The `prompts` folder is treated as a directory copy; adjust the path if your layout differs.
+
