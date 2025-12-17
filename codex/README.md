@@ -9,7 +9,6 @@ A small toolkit of coding rules and workflow helpers used by Codex CLI and Codex
 mkdir -p ~/.codex
 
 # copy the entire codex folder into your home config
-cp -r ./codex ~/.codex/
+cd Optimize-Coding-Agent
+cp -r ./codex/* ~/.codex/
 ```
-
-
