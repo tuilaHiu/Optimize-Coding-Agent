@@ -3,13 +3,14 @@
 ## Overview
 A small toolkit of coding rules and workflow helpers used by Antigravity.
 
-## Copy this folder into `~/.gemini`
+## Copy the prompt set into `~/.gemini`
 ```bash
 # ensure target exists
 mkdir -p ~/.gemini
 
-# copy the entire codex folder into your home config
-cp -r ./gemini ~/.gemini/
+# copy skills and workflows into your home config (skipping GEMINI.md)
+cp -r ./gemini/antigravity ~/.gemini/
+cp -r ./gemini/skills ~/.gemini/
 ```
 
 

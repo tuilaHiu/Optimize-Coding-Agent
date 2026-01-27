@@ -29,11 +29,14 @@ Your log file MUST be derived from the assigned plan filename:
 1) Read module plan → extract acceptance criteria + verification steps
 2) If unclear/inconsistent with context → ask questions BEFORE coding
 3) Implement changes (create/update files as specified)
-4) Quality Gate:
-   - type hints, docstrings, error handling rules
-   - tests for behavior changes
-   - follow repo lint/format tooling if present
-   - run verify commands
+4) Quality Gate - Self Review (REQUIRED BEFORE COMPLETING):
+   - **Mental Simulation:** Verbally walk through your code logic with a specific input example to catch logic bugs.
+   - **Checklist:**
+     - [ ] Does it follow PEP 8 and Project Style?
+     - [ ] Are type hints complete (no Any unless necessary)?
+     - [ ] Are edge cases handled (empty lists, network timeout)?
+     - [ ] Did I remove all temporary logging/print statements?
+     - [ ] Did I run existing tests to ensure no regression?
 5) Write optional notes (if any)
 6) Append execution log entry
 

@@ -52,14 +52,20 @@ Rules:
 - Analyze the user request
 - If unclear → ask clarifying questions and STOP (do not write plans yet)
 
-### Step 2: Task Breakdown (Module-Level)
+### Step 2: Research & Verification (MANDATORY for External Deps)
+If the task involves external APIs (e.g., Azure, Stripe), SDKs, or 3rd-party libraries:
+- You MUST use available tools (search_web, etc.) to verify the LATEST version, syntax, and breaking changes.
+- Do NOT rely solely on training data for rapidly changing technologies.
+- Record key findings (versions, API endpoints) to include in the plan.
+
+### Step 3: Task Breakdown (Module-Level)
 Break the task into major modules (e.g., backend, frontend, db, infra, AI, UI/UX).
 For each module, define:
 - objective
 - boundaries (in-scope / out-of-scope)
 - deliverables
 
-### Step 3: Plan Generation (Write Files)
+### Step 4: Plan Generation (Write Files)
 Write files in this order:
 1) `00_overall_plan.md`
 2) Module plan files `01_...`, `02_...`, ...
@@ -89,3 +95,27 @@ Write files in this order:
 
 ## 6. Risks / Open Questions
 - ...
+
+## 7. Rollback Strategy
+- If this fails, how to revert? (e.g., git revert, db migration down script)
+```
+
+### B) Module Plan File: `01_{module_name}__owner_{agent_name}.md`
+```markdown
+# Module Plan: {module_name}
+
+## 1. Objective
+[1-2 sentences]
+
+## 2. Technical Context (REQUIRED)
+- **Relevant Files:** [list existing files to read/edit]
+- **Dependencies:** [libraries + versions to use]
+- **Potential Conflicts:** [e.g., circular imports, thread safety]
+
+## 3. Implementation Steps
+### Step 3.1: {Step Name}
+- ...
+- Verification: ...
+
+### Step 3.2: ...
+```

@@ -24,6 +24,21 @@ All code generated must strictly adhere to the following rules:
 ### D. Tests (MANDATORY when behavior changes)
 - If behavior changes, **MUST** add/update tests.
 
+### E. Security & Secrets (CRITICAL)
+- **NO HARDCODED SECRETS:** Never commit API keys, passwords, or private keys.
+- **Environment Variables:** Use `os.getenv()` or `pydantic-settings`.
+- **.gitignore:** Ensure any new output files or data directories are added to `.gitignore`.
+
+### F. Database & SQL Interactions
+- **No F-strings in SQL:** Always use parameterized queries to prevent SQL Injection.
+- **Performance:** Avoid `SELECT *` on large tables (especially ClickHouse). Select only required columns.
+- **Migration:** If schema changes, create a migration file/script; do not run raw DDL via generic execution unless specified.
+
+### G. Dependency Management
+- **Tooling:** uv add {package} if uv.lock exists, or poetry add {package} if poetry.lock exists. If neither is present, default to using uv.
+- **Lock File:** Always ensure the corresponding lock file (uv.lock or poetry.lock) is updated after adding packages.
+
+- **Execution:** Execution: Run scripts or commands using uv run {command} or poetry run {command} respectively, based on the tool identified above.
 ---
 
 ## 2. Execution Logging Protocol (CRITICAL)
@@ -52,3 +67,31 @@ Rules:
 - **Summary:** {What changed + why (1-3 lines).}
 - **Verify:** {Command(s) or steps to confirm.}
 - **Status:** ✅ Success | ⚠️ Partial | ❌ Failed
+```
+
+---
+
+## 3. Communication Protocol (Senior Engineer Persona)
+When implementing complex features or refactoring, follow this structure in your response:
+
+### 1. Trade-offs & Decisions (Mental Sandbox)
+- Briefly list options considered before settling on the solution.
+- **Example:** "Why manual SQL vs ORM? Why Redis vs In-memory? Why Async vs Threading?"
+- Highlight any potential technical debt being introduced for speed.
+
+### 2. Implementation
+- The code itself (strictly following Section 1 standards).
+
+### 3. Operational Concerns & Edge Cases
+- **Monitoring:** How do we know if this breaks in production? (Logs, metrics).
+- **Edge Cases:** What happens with large inputs, timeouts, or empty states?
+- **Security:** Explicitly mention if input validation or auth checks were added.
+
+---
+
+## 4. Implementation Workflow (Problem Solving Mindset)
+Before writing any code for a significant change (>10 lines or cross-file impact):
+
+1.  **Stop & Think 🛑:** Outline the plan in 3-5 bullet points in your response.
+2.  **Verify Context 🔍:** Confirm you have read all relevant files (imports, base classes, config).
+3.  **Execute 🚀:** Write code tailored to the plan.
