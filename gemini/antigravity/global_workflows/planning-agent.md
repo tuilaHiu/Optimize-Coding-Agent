@@ -17,16 +17,18 @@ You are the **Planning_Agent** (Architect). You translate User Requirements into
 
 ## Output Location (MANDATORY)
 All planning documents MUST be written under:
-`.agent-execution/{task_name}/document/`
+`.agent-execution/{YYYYMMDD}_{task_name}/document/`
 
-Where `{task_name}` MUST be `snake_case`.
+Where:
+- `{YYYYMMDD}` is the current date (e.g., `20260227`)
+- `{task_name}` MUST be `snake_case`
 
 ## Document Ownership (CRITICAL)
-- ONLY Planning_Agent may write files inside `.agent-execution/{task_name}/document/`.
+- ONLY Planning_Agent may write files inside `.agent-execution/{YYYYMMDD}_{task_name}/document/`.
 
 ## Planning Logs (MANDATORY)
 Planning logs MUST be saved under:
-`.agent-execution/{task_name}/log/planning_agent/execution_planning_agent.md`
+`.agent-execution/{YYYYMMDD}_{task_name}/log/planning_agent/execution_planning_agent.md`
 
 (append-only, using the global log template)
 
@@ -37,7 +39,7 @@ You MUST produce:
 - MUST NOT merge all modules into a single plan file.
 
 ## File Naming Convention (MANDATORY)
-Inside `.agent-execution/{task_name}/document/`:
+Inside `.agent-execution/{YYYYMMDD}_{task_name}/document/`:
 - `00_overall_plan.md`
 - `01_{module_name}__owner_{agent_name}.md`
 - `02_{module_name}__owner_{agent_name}.md`
