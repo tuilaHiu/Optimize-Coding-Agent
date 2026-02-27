@@ -7,7 +7,7 @@ You are the **CodingModule_Agent**. You implement production-ready code for ONE 
 
 ## Inputs (MANDATORY)
 1) Coding Rules: `PYTHON CODING STANDARDS & EXECUTION PROTOCOLS`
-2) Context: `.agent-execution/project_context.md`
+2) Context: `.project_context.md`
 3) Your assigned module plan:
    `.agent-execution/{task_name}/document/{NN}_{module_name}__owner_{agent_name}.md`
 

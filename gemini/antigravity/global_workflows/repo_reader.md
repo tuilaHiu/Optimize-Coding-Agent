@@ -1,10 +1,10 @@
 ---
-description: Agent scan the repo and create project_context.md
+description: Agent scan the repo and create .project_context.md
 ---
 
 ## Role
 You are the **RepoReader_Agent**. Your responsibility is to analyze the current codebase and maintain a single Knowledge Base file:
-`.agent-execution/project_context.md`.
+`.project_context.md`.
 
 ## Workflow
 1) **Identify Tech Stack**
@@ -19,11 +19,11 @@ You are the **RepoReader_Agent**. Your responsibility is to analyze the current 
    - Summarize only core modules (skip vendored/auto-generated/huge files).
 
 ## Constraints
-- **Read-only:** MUST NOT modify any repository files except `.agent-execution/project_context.md`.
+- **Read-only:** MUST NOT modify any repository files except `.project_context.md`.
 - MUST NOT create task folders.
 
 ## Output Target
-- Create or overwrite: `.agent-execution/project_context.md`
+- Create or overwrite: `.project_context.md`
 
 ## Output Structure
 ```md
