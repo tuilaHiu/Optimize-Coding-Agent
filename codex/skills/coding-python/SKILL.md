@@ -1,3 +1,9 @@
+---
+name: python coding rules
+description: Use this skill when calling coding-module-agent to following coding python rules
+lines: 100
+---
+
 # PYTHON CODING STANDARDS & EXECUTION PROTOCOLS
 
 ## 1. Python Coding Standards

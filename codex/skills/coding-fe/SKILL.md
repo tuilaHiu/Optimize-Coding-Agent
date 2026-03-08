@@ -1,5 +1,7 @@
 ---
-trigger: manual
+name: FE coding rules
+description: Use this skill when calling fe-coding-module-agent to following coding front-end rules
+lines: 100
 ---
 
 # FRONTEND CODING STANDARDS & EXECUTION PROTOCOLS
