@@ -1,104 +1,73 @@
 ---
-name: python coding rules
-description: Use this skill when calling coding-module-agent to following coding python rules
-lines: 100
+name: coding-python
+description: Use when a coding worker is implementing or updating Python code and needs compact repo-first rules for code quality, testing, dependency changes, and self-review.
 ---
 
-# PYTHON CODING STANDARDS & EXECUTION PROTOCOLS
+# Python Coding Rules
 
-## 1. Python Coding Standards
-All code generated must strictly adhere to the following rules:
+Use this skill when a worker is writing or modifying Python code.
 
-### A. Style & Formatting
-- **Repo First:** Follow existing repo lint/format configs (ruff/black/isort/etc.) if present.
-- **PEP 8:** Follow PEP 8 for indentation, spacing, and naming.
-- **Naming:**
-  - Variables/Functions: `snake_case`
-  - Classes: `PascalCase`
-  - Constants: `UPPER_CASE`
-- **Imports:** Standard library -> Third-party -> Local application.
+This skill only defines Python implementation rules. Workflow V2 orchestration, delegation, context selection, and logging are handled by the runtime prompts such as `coding-module-agent` and `main_orchestrator`.
 
-### B. Type Hinting & Docstrings (MANDATORY)
-- **Type Hints:** All function args + return must have type hints.
-- **Docstrings:** Every module, class, and public function must have a docstring (Google/NumPy):
-  - Purpose, Args, Returns, Raises (if applicable).
+## Working Boundaries
+- Treat this skill as the Python coding rules source for the task.
+- Do not pull legacy execution or logging rules from older workflow versions.
+- Stay inside the scope and allowed files provided by the worker prompt.
+- Read the relevant files before editing so the change matches repo patterns.
 
-### C. Error Handling
-- Catch specific exceptions (e.g., `except ValueError:`).
-- **NEVER** use bare `except:` except at top-level entry point for logging.
+## Core Rules
 
-### D. Tests (MANDATORY when behavior changes)
-- If behavior changes, **MUST** add/update tests.
+### 1. Repo First
+- Follow the repo's existing structure, naming, typing, test style, and dependency conventions.
+- Match the repo's formatter and linter setup before applying generic Python preferences.
+- Prefer the existing project pattern over introducing a new abstraction style.
 
-### E. Security & Secrets (CRITICAL)
-- **NO HARDCODED SECRETS:** Never commit API keys, passwords, or private keys.
-- **Environment Variables:** Use `os.getenv()` or `pydantic-settings`.
-- **.gitignore:** Ensure any new output files or data directories are added to `.gitignore`.
+### 2. Python Style
+- Use `snake_case` for functions and variables, `PascalCase` for classes, and `UPPER_CASE` for constants.
+- Keep imports grouped as standard library, third-party, then local modules.
+- Prefer small, explicit functions over dense logic blocks.
 
-### F. Database & SQL Interactions
-- **No F-strings in SQL:** Always use parameterized queries to prevent SQL Injection.
-- **Performance:** Avoid `SELECT *` on large tables (especially ClickHouse). Select only required columns.
-- **Migration:** If schema changes, create a migration file/script; do not run raw DDL via generic execution unless specified.
+### 3. Typing And Documentation
+- Add type hints to new or changed function arguments and return values.
+- Follow the repo's existing docstring style.
+- If the repo has no clear docstring convention, add docstrings only where behavior is public or non-obvious.
 
-### G. Dependency Management
-- **Tooling:** uv add {package} if uv.lock exists, or poetry add {package} if poetry.lock exists. If neither is present, default to using uv.
-- **Lock File:** Always ensure the corresponding lock file (uv.lock or poetry.lock) is updated after adding packages.
+### 4. Errors And Safety
+- Catch specific exceptions when recovery is intentional.
+- Avoid bare `except:` except at a top-level boundary where the repo already expects it.
+- Never hardcode secrets, tokens, or credentials.
+- Use the repo's existing environment/config pattern for settings.
 
-- **Execution:** Execution: Run scripts or commands using uv run {command} or poetry run {command} respectively, based on the tool identified above.
----
+### 5. Data And Persistence
+- Use parameterized queries instead of string-built SQL.
+- If a schema change is required, add the matching migration or migration script using the repo's existing convention.
+- Avoid broad or wasteful data access patterns when a narrower query is sufficient.
 
-## 2. Execution Logging Protocol (CRITICAL)
-Every time an agent modifies the codebase (create/update/delete/refactor/rename/move), it MUST log the action.
+### 6. Tests
+- If behavior changes, add or update tests.
+- Prefer the closest existing test style and test location in the repo.
+- If you cannot run tests, say so explicitly in the result summary.
 
-### Log Location (MANDATORY)
-All logs MUST be stored under:
-`.agent-execution/{YYYYMMDD}_{task_name}/log/execution__{plan_file_stem}.md`
+### 7. Dependencies
+- Use the repo's existing dependency manager and lock-file flow.
+- If `uv.lock` exists, prefer `uv`.
+- If `poetry.lock` exists, prefer `poetry`.
+- If neither exists, follow the repo's actual dependency convention instead of inventing one.
+- Explain any new dependency briefly in the worker output.
 
-Where:
-- `{YYYYMMDD}` = current date (e.g., `20260227`)
-- `{task_name}` = folder name generated by Planning Agent (snake_case)
-- `{plan_file_stem}` = the assigned plan filename WITHOUT `.md`
-  (example: `01_backend_api__owner_coding_backend_agent`)
+## Worker Self-Check
+Before completing a Python implementation task, verify:
+- the change stays inside the assigned scope
+- the code matches existing repo patterns
+- edge cases and failure paths are handled
+- tests or verification steps were run when possible
+- the final result can be summarized cleanly for `main_orchestrator`
 
-Rules:
-- Always append. Never overwrite.
-- Create directories if missing.
-- The log file name MUST be derived from the plan file stem (no manual naming).
+## What This Skill Does Not Own
+- planning the task
+- deciding whether the task is `general_task` or `api_focus_task`
+- choosing which context artifact to load
+- execution logging format
+- subagent spawning or model selection
 
-### Log Entry Format
-```markdown
-## [YYYY-MM-DD HH:MM:SS] Task: {Brief Task Title}
-- **Action:** [Create | Update | Delete | Refactor | Rename/Move]
-- **Files Affected:**
-  - `path/to/file1.py`
-- **Summary:** {What changed + why (1-3 lines).}
-- **Verify:** {Command(s) or steps to confirm.}
-- **Status:** ✅ Success | ⚠️ Partial | ❌ Failed
-```
-
----
-
-## 3. Communication Protocol (Senior Engineer Persona)
-When implementing complex features or refactoring, follow this structure in your response:
-
-### 1. Trade-offs & Decisions (Mental Sandbox)
-- Briefly list options considered before settling on the solution.
-- **Example:** "Why manual SQL vs ORM? Why Redis vs In-memory? Why Async vs Threading?"
-- Highlight any potential technical debt being introduced for speed.
-
-### 2. Implementation
-- The code itself (strictly following Section 1 standards).
-
-### 3. Operational Concerns & Edge Cases
-- **Monitoring:** How do we know if this breaks in production? (Logs, metrics).
-- **Edge Cases:** What happens with large inputs, timeouts, or empty states?
-- **Security:** Explicitly mention if input validation or auth checks were added.
-
----
-
-## 4. Implementation Workflow (Problem Solving Mindset)
-Before writing any code for a significant change (>10 lines or cross-file impact):
-
-1.  **Stop & Think 🛑:** Outline the plan in 3-5 bullet points in your response.
-2.  **Verify Context 🔍:** Confirm you have read all relevant files (imports, base classes, config).
-3.  **Execute 🚀:** Write code tailored to the plan.
+Those concerns belong to the runtime prompts, not this skill.
