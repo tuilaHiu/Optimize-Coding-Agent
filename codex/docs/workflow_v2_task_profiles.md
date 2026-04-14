@@ -3,6 +3,8 @@
 ## Purpose
 Workflow V2 uses one user-facing orchestrator and two task profiles to keep context focused while preserving a single conversation with the user.
 
+The same task profiles apply to both implementation work and merge request review.
+
 ## Task Profiles
 
 ### `general_task`
@@ -40,6 +42,15 @@ Secondary context:
 3. Choose `general_task` when the task changes shared behavior beyond one API or cannot be planned safely from API-local context.
 4. If the request looks API-scoped but the expected change touches shared auth, middleware, config, or architecture, keep the task as `api_focus_task` and mark that `.project_context.md` must also be updated after verification.
 5. If the request is ambiguous, ask the user before writing plans.
+6. For merge request review, classify from the final diff scope, not from the fact that the task is a review.
+
+## Merge Request Review Flow
+- Merge request or pull request review is not a third task profile.
+- Review the final diff from `merge_base...head` as the primary artifact.
+- Treat commit history, title, and description as supporting context only.
+- Require a complete review package before review starts: `base_ref`, `head_ref`, `merge_base_ref`, `changed_files`, and `final_diff_artifact`.
+- Use `mr_reviewer_agent` for read-only review work.
+- Do not run `coding_module_agent`, `verifier_agent`, or `repo_updater` for a review-only task unless the user asks for implementation follow-up.
 
 ## Context Loading Order
 
@@ -81,7 +92,7 @@ Update only `.api_context/{api_slug}.md` when the work stays local to the target
 ## Working Rules
 - `main_orchestrator` remains the only user-facing agent.
 - `main_orchestrator` is conversation-only and must delegate coding, verification, and context refresh work to helper agents.
-- The core helper set is `repo_reader`, `api_reader`, `coding_module_agent`, `verifier_agent`, and `repo_updater`.
+- The core helper set is `repo_reader`, `api_reader`, `coding_module_agent`, `mr_reviewer_agent`, `verifier_agent`, and `repo_updater`.
 - Helper invocation is automatic once the task is clear enough; the user should not need to manually trigger internal subagents.
 - Helper model and reasoning choices should favor the cheapest safe profile for the current task.
 - Existing helper prompts are updated to use embedded input/output contracts.
