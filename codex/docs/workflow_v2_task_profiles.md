@@ -1,7 +1,7 @@
-# Workflow V2 Task Profiles
+# Skill-First Workflow Task Profiles
 
 ## Purpose
-Workflow V2 uses one user-facing orchestrator and two task profiles to keep context focused while preserving a single conversation with the user.
+The skill-first Codex workflow uses one user-facing coordination skill and two task profiles to keep context focused while preserving a single conversation with the user.
 
 ## Task Profiles
 
@@ -44,21 +44,21 @@ Secondary context:
 ## Context Loading Order
 
 ### For `general_task`
-1. Ensure `.project_context.md` exists or refresh it with `repo_reader`.
+1. Ensure `.project_context.md` exists or refresh it with `$repo-context`.
 2. Brainstorm with the user.
 3. Write the overall plan and module plans.
 4. Coordinate coding work.
-5. Run `verifier_agent`.
-6. After successful verification, run `repo_updater`.
+5. Run `$verification-gate`.
+6. After successful verification, run `$context-maintenance`.
 
 ### For `api_focus_task`
 1. Resolve the API slug and target endpoint if known.
-2. Ensure `.api_context/{api_slug}.md` exists or refresh it with `api_reader`.
+2. Ensure `.api_context/{api_slug}.md` exists or refresh it with `$api-dossier`.
 3. Load only the API context plus minimal repo context needed for shared understanding.
 4. Brainstorm with the user.
 5. Write the overall plan and module plans.
 6. Coordinate coding work.
-7. Run `verifier_agent`.
+7. Run `$verification-gate`.
 8. After successful verification, refresh `.api_context/{api_slug}.md`.
 9. Update `.project_context.md` only if the verifier confirms the change is cross-cutting.
 
@@ -79,11 +79,9 @@ Update only `.api_context/{api_slug}.md` when the work stays local to the target
 - API-specific tests
 
 ## Working Rules
-- `main_orchestrator` remains the only user-facing agent.
-- `main_orchestrator` is conversation-only and must delegate coding, verification, and context refresh work to helper agents.
-- The core helper set is `repo_reader`, `api_reader`, `coding_module_agent`, `verifier_agent`, and `repo_updater`.
-- Helper invocation is automatic once the task is clear enough; the user should not need to manually trigger internal subagents.
+- `$codex-coding-workflow` remains the main user-facing workflow.
+- The core helper skill set is `$repo-context`, `$api-dossier`, `$bounded-implementation`, `$verification-gate`, and `$context-maintenance`.
+- Helper agents may be used when the user asks for delegation or runtime policy permits it.
 - Helper model and reasoning choices should favor the cheapest safe profile for the current task.
-- Existing helper prompts are updated to use embedded input/output contracts.
 - API context files are working context for future implementation, not public product documentation.
-- Runtime prompts are the source of truth. Support docs help readability but must not be the only place a critical rule lives.
+- Runtime skills are the source of truth. Support docs help readability but must not be the only place a critical rule lives.

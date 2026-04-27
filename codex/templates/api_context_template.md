@@ -1,6 +1,6 @@
 # API Context: {api_slug}
 
-> This template is a support aid. Runtime prompts remain the source of truth for required behavior and sections.
+> This template is a support aid. Runtime skills remain the source of truth for required behavior and sections.
 
 ## API Identity
 - **API Slug:** `{api_slug}`
