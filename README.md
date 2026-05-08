@@ -76,15 +76,26 @@ Then open Codex from `/path/to/target-repo` and use `$codex-coding-workflow`.
 
 ### Option C: Install Globally
 
-Copy selected skills and custom agents into your home config:
+Install skills, custom agents, and MCP server config into your home Codex config:
 
 ```bash
-mkdir -p "$HOME/.agents/skills" "$HOME/.codex/agents"
-cp -R .agents/skills/* "$HOME/.agents/skills/"
-cp .codex/agents/*.toml "$HOME/.codex/agents/"
+./scripts/install-codex-workflow.sh
 ```
 
-Use global install when you want the workflow available across many repositories. Keep project-specific rules in each repo's `AGENTS.md` or `codex/AGENTS.md`.
+The installer:
+
+- copies `.agents/skills/` into `$HOME/.agents/skills/`
+- copies `.codex/agents/` into `$HOME/.codex/agents/`
+- registers the OpenAI developer docs MCP server
+- registers the GitLab MCP server through `glab mcp serve`
+
+Use global install when you want the workflow available across many repositories. Keep project-specific rules in each repo's `AGENTS.md` or `codex/AGENTS.md`. Restart Codex after installation so the new skills, custom agents, and MCP servers are loaded.
+
+Before using the GitLab MCP server, install and authenticate `glab`:
+
+```bash
+glab auth login
+```
 
 ## How To Use
 
