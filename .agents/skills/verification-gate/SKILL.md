@@ -28,9 +28,10 @@ Use the assignment contract and implementation evidence:
 3. Run or evaluate verification steps when possible.
 4. Check whether the implementation satisfies acceptance criteria.
 5. Check whether the implementation is simpler than necessary, over-abstracted, speculative, or larger than the request requires.
-6. Check whether every changed line traces to the user's request and whether unrelated cleanup or formatting drift occurred.
-7. Identify regression risks, missing tests, scope drift, or partial work.
-8. Decide whether context maintenance is required.
+6. Check whether the fix addresses the generalized failure class behind the reported examples, not only the literal sample data.
+7. Check whether every changed line traces to the user's request and whether unrelated cleanup or formatting drift occurred.
+8. Identify regression risks, missing tests, scope drift, or partial work.
+9. Decide whether context maintenance is required.
 
 ## Decision Rules
 
@@ -40,6 +41,8 @@ Use the assignment contract and implementation evidence:
 - `failed`: implementation is incorrect or verification clearly fails.
 
 Treat unnecessary abstractions, speculative behavior, unrelated edits, or unexplained broad diffs as at least `partial` until resolved or explicitly accepted by the user.
+
+Treat narrow hardcoded fixes as at least `partial` when the report indicates a broader failure class. A fix is acceptable when it encodes the underlying invariant and verifies representative cases, while staying within the assigned scope.
 
 For `api_focus_task`:
 - Set `needs_api_context_refresh = true` after any verified code change affecting the tracked API.
@@ -59,6 +62,7 @@ Return:
 - `blockers`
 - `follow_up_actions`
 - `acceptance_result`
+- `generalization_result`
 - `regression_risks`
 - `simplicity_result`
 - `surgical_change_result`
