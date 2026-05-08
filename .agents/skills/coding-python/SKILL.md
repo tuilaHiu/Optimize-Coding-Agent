@@ -38,6 +38,13 @@ Workflow orchestration, context selection, delegation, and verification are owne
 - Never hardcode secrets, tokens, or credentials.
 - Use the repo's existing environment/config pattern.
 
+### Generalized Correctness
+- Treat reported examples as symptoms of a broader failure class, not as the full problem definition.
+- Avoid hardcoded fixes for one language, provider response, ID, status string, timestamp shape, or test fixture unless the business rule is explicitly that narrow.
+- Prefer data-driven parsing, standards-aware libraries, normalized inputs, capability checks, or existing locale/config abstractions over enumerating only the currently failing cases.
+- When fixing behavior reported for a few cases, identify the invariant that should hold for all equivalent cases and implement against that invariant.
+- Keep the generalization bounded to the proven failure class; do not introduce speculative frameworks, broad rewrites, or unrelated configurability.
+
 ### Data And Persistence
 - Use parameterized queries instead of string-built SQL.
 - If a schema change is required, add the matching migration using repo conventions.
@@ -55,6 +62,8 @@ Workflow orchestration, context selection, delegation, and verification are owne
 Before completion, verify:
 - scope and allowed files were respected
 - code matches repo patterns
+- the fix handles the broader failure class behind the reported examples
+- no new hardcoded special cases were added unless they are explicit product rules
 - edge cases and failure paths are handled
 - tests or verification steps were run when possible
 - final output is easy for the orchestrating thread to synthesize
