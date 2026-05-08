@@ -41,6 +41,7 @@ Main skills:
 - `$verification-gate`: verifies implementation, review output, and context refresh needs.
 - `$context-maintenance`: updates `.project_context.md` after verified changes.
 - `$coding-python`: Python-specific coding rules.
+- `$merge-request-review`: reviews GitLab merge requests through GitLab MCP, `glab`, or local git.
 
 Main custom agents:
 
@@ -145,22 +146,24 @@ Expected behavior:
 ## Example: Merge Request Review
 
 ```md
-$codex-coding-workflow
+$merge-request-review
 
-Review the current branch against `main`.
+Review GitLab MR !123.
 
 Requirements:
 - review only, do not edit files
-- inspect `main...HEAD`
+- inspect the MR net diff against its target branch
+- use GitLab MCP or `glab` for MR metadata, commits, pipeline, and discussions when available
 - prioritize bugs, regressions, security issues, data loss, and missing tests
+- flag hardcoded or narrow fixes when the bug represents a broader failure class
 - report findings first with severity and file/line references
 - if there are no findings, say so and list residual risk or test gaps
 ```
 
 Expected behavior:
 
-- The workflow treats this as review-only and does not use `$bounded-implementation`.
-- `verifier` or `$verification-gate` inspects changed files, acceptance criteria, tests, and regression risk.
+- `$merge-request-review` treats this as review-only and does not use `$bounded-implementation`.
+- It inspects MR metadata, the target-vs-source net diff, relevant commits, pipeline status, changed files, and directly related code paths.
 - Output starts with findings, ordered by severity.
 - Context files are not updated unless a later verified implementation changes repo behavior.
 
