@@ -18,12 +18,41 @@ ensure_dir() {
   mkdir -p "$1"
 }
 
-copy_dir_contents() {
+copy_skill_dirs_replace() {
   local src="$1"
   local dest="$2"
+  local skill
+  local name
 
   ensure_dir "$dest"
-  cp -R "$src"/. "$dest"/
+
+  for skill in "$src"/*; do
+    [[ -d "$skill" ]] || continue
+    [[ -f "$skill/SKILL.md" ]] || {
+      warn "Skipping '$skill' because it does not contain SKILL.md"
+      continue
+    }
+
+    name="$(basename "$skill")"
+    rm -rf "$dest/$name"
+    cp -R "$skill" "$dest/$name"
+  done
+}
+
+copy_agent_files_replace() {
+  local src="$1"
+  local dest="$2"
+  local agent
+  local name
+
+  ensure_dir "$dest"
+
+  for agent in "$src"/*.toml; do
+    [[ -f "$agent" ]] || continue
+    name="$(basename "$agent")"
+    rm -f "$dest/$name"
+    cp "$agent" "$dest/$name"
+  done
 }
 
 codex_mcp_has() {
@@ -91,10 +120,10 @@ args = ["mcp", "serve"]'
 
 install_skills_and_agents() {
   info "Installing skills into $AGENTS_HOME/skills"
-  copy_dir_contents "$ROOT_DIR/.agents/skills" "$AGENTS_HOME/skills"
+  copy_skill_dirs_replace "$ROOT_DIR/.agents/skills" "$AGENTS_HOME/skills"
 
   info "Installing custom agents into $CODEX_HOME/agents"
-  copy_dir_contents "$ROOT_DIR/.codex/agents" "$CODEX_HOME/agents"
+  copy_agent_files_replace "$ROOT_DIR/.codex/agents" "$CODEX_HOME/agents"
 }
 
 install_mcp_servers() {

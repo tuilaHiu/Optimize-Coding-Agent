@@ -9,6 +9,8 @@ Create or refresh one focused API context file: `.api_context/{api_slug}.md`.
 
 Use `snake_case` for `api_slug` and reuse the same file for follow-up work on the same API.
 
+The dossier is working context for humans and agents. Optimize for fast reading: concise prose, tables, workflow diagrams, and stable section order.
+
 ## Modes
 
 - `capture`: create a dossier when it is missing or too incomplete to use.
@@ -27,12 +29,23 @@ Inspect only what is needed for the target API:
 
 Avoid full repo scans unless the API cannot be traced otherwise.
 
+## Human-Readable Format
+
+Use this style:
+- Start with a short "At a glance" summary.
+- Prefer tables for routes, files, contracts, dependencies, risks, and verification.
+- Include a Mermaid `flowchart TD` for the happy-path request flow when the API has more than one meaningful step.
+- Keep paragraphs short. Avoid dumping raw code, long schemas, or full stack traces.
+- Use `Unknown` instead of guessing when a field cannot be verified.
+- Put detailed notes after the quick reference sections, not before them.
+
 ## Required Sections
 
 The API dossier must contain:
+- At a Glance
 - API Identity
-- Route and Method
-- Purpose and Business Flow
+- Endpoint Map
+- Workflow
 - Relevant Files
 - Request Contract
 - Response Contract

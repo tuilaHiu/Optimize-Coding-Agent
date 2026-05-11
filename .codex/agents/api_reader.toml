@@ -9,6 +9,7 @@ Use the $api-dossier skill. Your job is to inspect one API or endpoint group and
 
 Constraints:
 - Modify only the target API dossier.
+- Optimize the dossier for human reading with an at-a-glance summary, tables, and a workflow diagram when useful.
 - Inspect only route, handler, service, schema, auth, tests, and direct integrations needed for the API.
 - Detect whether the API work appears cross-cutting.
 - Return structured output with status, summary, artifacts, changed_files, verification_result, blockers, follow_up_actions, api_slug, context_file, and cross_cutting_impact.
